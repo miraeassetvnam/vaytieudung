@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vay Tiêu Dùng Mirae Asset</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #004d99;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+    main {
+      max-width: 600px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #004d99;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #004d99;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #003366;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vay Tiêu Dùng Cá Nhân - Mirae Asset</h1>
+    <p>Hỗ trợ tài chính nhanh chóng, an toàn và uy tín</p>
+  </header>
+  <main>
+    <h2>Đăng ký tư vấn vay</h2>
+    <form action="https://formsubmit.co/thien.mafc@outlook.com" method="POST">
+      <label>Họ và tên:</label>
+      <input type="text" name="name" required />
+      
+      <label>Số điện thoại:</label>
+      <input type="tel" name="phone" required />
+      
+      <label>Số tiền muốn vay:</label>
+      <input type="number" name="amount" placeholder="Ví dụ: 50000000" required />
+      
+      <label>Thu nhập hàng tháng (ước tính):</label>
+      <input type="number" name="income" placeholder="Ví dụ: 10000000" required />
+      
+      <label>Ghi chú thêm (nếu có):</label>
+      <textarea name="message" rows="4"></textarea>
+      
+      <button type="submit">Gửi đăng ký</button>
+    </form>
+  </main>
+</body>
+</html>
