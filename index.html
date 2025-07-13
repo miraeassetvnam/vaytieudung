@@ -2,77 +2,101 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vay Tiêu Dùng Mirae Asset</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f2f2f2;
+      background: #f5f6fa;
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #004d99;
+      background: #007bff;
       color: white;
+      padding: 20px;
       text-align: center;
-      padding: 20px 0;
     }
-    main {
-      max-width: 600px;
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    .container {
+      max-width: 800px;
       margin: 30px auto;
       background: white;
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     h2 {
-      color: #004d99;
+      color: #007bff;
     }
-    input, select, textarea {
+    form input, form textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 4px;
+      box-sizing: border-box;
     }
-    button {
-      background-color: #004d99;
+    form button {
+      background: #007bff;
       color: white;
-      padding: 12px 20px;
       border: none;
-      border-radius: 5px;
+      padding: 12px 20px;
+      border-radius: 4px;
       cursor: pointer;
+      font-size: 16px;
     }
-    button:hover {
-      background-color: #003366;
+    form button:hover {
+      background: #0056b3;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f1f1f1;
+      margin-top: 50px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Vay Tiêu Dùng Cá Nhân - Mirae Asset</h1>
-    <p>Hỗ trợ tài chính nhanh chóng, an toàn và uy tín- Liên hệ: 0964307247 Mr Thiên</p>
+    <h1>Vay Tiêu Dùng Mirae Asset</h1>
+    <nav>
+      <a href="#home">Trang chủ</a>
+      <a href="#register">Đăng ký vay</a>
+      <a href="#login">Đăng nhập</a>
+    </nav>
   </header>
-  <main>
-    <h2>Đăng ký tư vấn vay</h2>
-    <form action="https://formsubmit.co/thien.mafc@outlook.com" method="POST">
-      <label>Họ và tên:</label>
-      <input type="text" name="name" required />
-      
-      <label>Số điện thoại:</label>
-      <input type="tel" name="phone" required />
-      
-      <label>Số tiền muốn vay:</label>
-      <input type="number" name="amount" placeholder="Ví dụ: 50000000" required />
-      
-      <label>Thu nhập hàng tháng (ước tính):</label>
-      <input type="number" name="income" placeholder="Ví dụ: 10000000" required />
-      
-      <label>Ghi chú thêm (nếu có):</label>
-      <textarea name="message" rows="4"></textarea>
-      
+
+  <div class="container" id="home">
+    <h2>Giới thiệu</h2>
+    <p>Chào mừng bạn đến với Mirae Asset - Đối tác tài chính tin cậy. Chúng tôi hỗ trợ các gói vay tiêu dùng nhanh chóng, thủ tục đơn giản, lãi suất ưu đãi.</p>
+  </div>
+
+  <div class="container" id="register">
+    <h2>Form Đăng Ký Vay</h2>
+    <form>
+      <input type="text" placeholder="Họ và tên" required />
+      <input type="text" placeholder="Số điện thoại" required />
+      <input type="number" placeholder="Số tiền muốn vay (VNĐ)" required />
+      <textarea placeholder="Ghi chú thêm (nếu có)"></textarea>
       <button type="submit">Gửi đăng ký</button>
     </form>
-  </main>
+  </div>
+
+  <div class="container" id="login">
+    <h2>Form Đăng Nhập</h2>
+    <form>
+      <input type="text" placeholder="Tên đăng nhập" required />
+      <input type="password" placeholder="Mật khẩu" required />
+      <button type="submit">Đăng nhập</button>
+    </form>
+  </div>
+
+  <footer>
+    © 2025 Mirae Asset | Hotline: 0964307247 Mr Thiên
+  </footer>
 </body>
 </html>
