@@ -1,50 +1,92 @@
-<?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Máy Tính Lãi Suất Vay</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .calculator {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      background: #e9ecef;
+      padding: 15px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Máy Tính Lãi Suất Vay</h2>
+    <label for="amount">Số tiền vay (VNĐ):</label>
+    <input type="number" id="amount" placeholder="Nhập số tiền vay">
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+    <label for="interest">Lãi suất (%/năm):</label>
+    <input type="number" id="interest" placeholder="Nhập lãi suất">
 
-// Lấy dữ liệu form
-$fullname = $_POST['fullname'];
-$email = $_POST['email'];
-$phone = $_POST['phone'];
-$password = $_POST['password'];
+    <label for="months">Thời hạn vay (tháng):</label>
+    <input type="number" id="months" placeholder="Nhập số tháng vay">
 
-// Soạn nội dung email
-$body = "
-Bạn nhận được một đăng ký tài khoản mới từ website Mirae Asset: <br><br>
-<strong>Họ và tên:</strong> $fullname <br>
-<strong>Email:</strong> $email <br>
-<strong>Số điện thoại:</strong> $phone <br>
-<strong>Mật khẩu:</strong> $password
-";
+    <button onclick="calculateLoan()">Tính Toán</button>
 
-$mail = new PHPMailer(true);
+    <div class="result" id="result"></div>
+  </div>
 
-try {
-    // SMTP cấu hình
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com'; // Gmail SMTP
-    $mail->SMTPAuth = true;
-    $mail->Username = 'thien.miraeassetgmail.com'; // Email của bạn
-    $mail->Password = 'Thienvu@2011'; // Mật khẩu ứng dụng
-    $mail->SMTPSecure = 'tls';
-    $mail->Port = 587;
+  <script>
+    function calculateLoan() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const interest = parseFloat(document.getElementById('interest').value) / 100 / 12;
+      const months = parseInt(document.getElementById('months').value);
 
-    // Người gửi & nhận
-    $mail->setFrom('YOUR_EMAIL@gmail.com', 'Mirae Asset Website');
-    $mail->addAddress('YOUR_EMAIL@gmail.com', 'Bạn');
+      if (isNaN(amount) || isNaN(interest) || isNaN(months) || amount <= 0 || months <= 0) {
+        alert('Vui lòng nhập đầy đủ và đúng thông tin.');
+        return;
+      }
 
-    // Nội dung mail
-    $mail->isHTML(true);
-    $mail->Subject = 'Đăng ký tài khoản mới từ website Mirae Asset';
-    $mail->Body    = $body;
+      // Công thức tính trả góp hàng tháng (dư nợ giảm dần):
+      const monthly = (amount * interest) / (1 - Math.pow(1 + interest, -months));
+      const totalPayment = monthly * months;
+      const totalInterest = totalPayment - amount;
 
-    $mail->send();
-    echo "Đăng ký thành công! Vui lòng kiểm tra email của bạn.";
-} catch (Exception $e) {
-    echo "Không gửi được email. Lỗi: {$mail->ErrorInfo}";
-}
-?>
+      document.getElementById('result').innerHTML = `
+        <strong>Kết Quả:</strong><br>
+        Số tiền trả hàng tháng: ${monthly.toFixed(0).toLocaleString()} VNĐ<br>
+        Tổng số tiền phải trả: ${totalPayment.toFixed(0).toLocaleString()} VNĐ<br>
+        Tổng lãi phải trả: ${totalInterest.toFixed(0).toLocaleString()} VNĐ
+      `;
+    }
+  </script>
+</body>
+</html>
