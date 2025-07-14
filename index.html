@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Máy Tính Lãi Suất Vay</title>
+  <title>Tính Lãi Suất Vay (Của Thiên)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -10,7 +10,7 @@
       padding: 20px;
     }
     .calculator {
-      max-width: 500px;
+      max-width: 600px;
       margin: auto;
       background: #fff;
       padding: 20px;
@@ -45,11 +45,27 @@
       padding: 15px;
       border-radius: 5px;
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: right;
+    }
+    th {
+      background: #007bff;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
   <div class="calculator">
-    <h2>Máy Tính Lãi Suất Vay</h2>
+    <h2>Máy Tính Lãi Suất Vay (Dư Nợ Gốc Giảm Dần)</h2>
     <label for="amount">Số tiền vay (VNĐ):</label>
     <input type="number" id="amount" placeholder="Nhập số tiền vay">
 
@@ -65,26 +81,61 @@
   </div>
 
   <script>
+    function formatCurrency(num) {
+      return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     function calculateLoan() {
       const amount = parseFloat(document.getElementById('amount').value);
-      const interest = parseFloat(document.getElementById('interest').value) / 100 / 12;
+      const annualInterest = parseFloat(document.getElementById('interest').value);
       const months = parseInt(document.getElementById('months').value);
 
-      if (isNaN(amount) || isNaN(interest) || isNaN(months) || amount <= 0 || months <= 0) {
+      if (isNaN(amount) || isNaN(annualInterest) || isNaN(months) || amount <= 0 || months <= 0) {
         alert('Vui lòng nhập đầy đủ và đúng thông tin.');
         return;
       }
 
-      // Công thức tính trả góp hàng tháng (dư nợ giảm dần):
-      const monthly = (amount * interest) / (1 - Math.pow(1 + interest, -months));
-      const totalPayment = monthly * months;
-      const totalInterest = totalPayment - amount;
+      const monthlyInterest = annualInterest / 12 / 100;
+      const gocHangThang = amount / months;
+
+      let table = `<table>
+        <tr>
+          <th>Tháng</th>
+          <th>Gốc</th>
+          <th>Lãi</th>
+          <th>Thanh toán</th>
+          <th>Dư nợ còn lại</th>
+        </tr>`;
+
+      let tongGoc = 0;
+      let tongLai = 0;
+      let duNo = amount;
+
+      for (let i = 1; i <= months; i++) {
+        const laiThang = duNo * monthlyInterest;
+        const thanhToan = gocHangThang + laiThang;
+        duNo -= gocHangThang;
+
+        tongGoc += gocHangThang;
+        tongLai += laiThang;
+
+        table += `<tr>
+          <td>${i}</td>
+          <td>${formatCurrency(gocHangThang)}</td>
+          <td>${formatCurrency(laiThang)}</td>
+          <td>${formatCurrency(thanhToan)}</td>
+          <td>${formatCurrency(duNo > 0 ? duNo : 0)}</td>
+        </tr>`;
+      }
+
+      table += `</table>`;
 
       document.getElementById('result').innerHTML = `
         <strong>Kết Quả:</strong><br>
-        Số tiền trả hàng tháng: ${monthly.toFixed(0).toLocaleString()} VNĐ<br>
-        Tổng số tiền phải trả: ${totalPayment.toFixed(0).toLocaleString()} VNĐ<br>
-        Tổng lãi phải trả: ${totalInterest.toFixed(0).toLocaleString()} VNĐ
+        Tổng gốc phải trả: ${formatCurrency(tongGoc)} VNĐ<br>
+        Tổng lãi phải trả: ${formatCurrency(tongLai)} VNĐ<br>
+        Tổng số tiền phải trả: ${formatCurrency(tongGoc + tongLai)} VNĐ
+        ${table}
       `;
     }
   </script>
