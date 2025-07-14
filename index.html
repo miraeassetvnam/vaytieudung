@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tính Lãi Suất Vay - Của Thiên (Annuity)</title>
+  <title>Máy Tính Lãi Suất Vay - Lãi Suất Phẳng + BH</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,33 +48,22 @@
       padding: 15px;
       border-radius: 5px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: right;
-    }
-    th {
-      background: #007bff;
-      color: #fff;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Máy Tính Lãi Suất Vay (Liên hệ: 0964 307 247 Mr Thiên)</h2>
+    <h2>Tính Lãi Suất Vay (Của Thiên 0964307247)</h2>
     <label>Số tiền vay (VNĐ):</label>
-    <input type="text" id="amount" placeholder="Nhập số tiền, ví dụ 30.000.000">
+    <input type="text" id="amount" placeholder="Ví dụ: 28.500.000">
 
-    <label>Lãi suất (%/năm):</label>
-    <input type="number" id="interest" placeholder="Nhập lãi suất">
+    <label>Phí bảo hiểm (%):</label>
+    <input type="number" id="insurance" placeholder="Ví dụ: 7.7">
+
+    <label>Lãi suất (%/tháng):</label>
+    <input type="number" id="interest" placeholder="Ví dụ: 0.52">
 
     <label>Thời hạn vay (tháng):</label>
-    <input type="number" id="months" placeholder="Nhập số tháng vay">
+    <input type="number" id="months" placeholder="Ví dụ: 36">
 
     <button onclick="calculate()">Tính Toán</button>
 
@@ -82,17 +71,17 @@
   </div>
 
   <script>
-    // Hàm format số có dấu chấm ngăn cách
+    // Format số có dấu chấm
     function formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
-    // Gỡ dấu chấm để tính toán
+    // Gỡ dấu chấm
     function unformatNumber(num) {
       return num.replace(/\./g, "");
     }
 
-    // Format khi gõ
+    // Format khi gõ số tiền vay
     document.getElementById('amount').addEventListener('input', function (e) {
       let value = e.target.value.replace(/\./g, '').replace(/\D/g, '');
       if (value) {
@@ -102,46 +91,36 @@
       }
     });
 
-    function formatCurrency(num) {
-      return formatNumber(num.toFixed(0));
-    }
-
     function calculate() {
       const P = parseFloat(unformatNumber(document.getElementById('amount').value));
-      const annualRate = parseFloat(document.getElementById('interest').value);
-      const n = parseInt(document.getElementById('months').value);
+      const insurance = parseFloat(document.getElementById('insurance').value);
+      const monthlyRate = parseFloat(document.getElementById('interest').value) / 100;
+      const months = parseInt(document.getElementById('months').value);
 
-      if (isNaN(P) || isNaN(annualRate) || isNaN(n) || P <= 0 || n <= 0) {
+      if (isNaN(P) || isNaN(insurance) || isNaN(monthlyRate) || isNaN(months) || P <= 0 || months <= 0) {
         alert("Vui lòng nhập đầy đủ thông tin hợp lệ.");
         return;
       }
 
-      const r = annualRate / 12 / 100;
+      const insuranceFee = P * insurance / 100;
+      const totalLoan = P + insuranceFee;
 
-      const A = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
-      const totalPay = A * n;
-      const totalInterest = totalPay - P;
+      const principalPerMonth = totalLoan / months;
+      const interestPerMonth = totalLoan * monthlyRate;
+      const monthlyPayment = principalPerMonth + interestPerMonth;
 
-      let table = `<table>
-        <tr>
-          <th>Tháng</th>
-          <th>Tiền trả</th>
-        </tr>`;
-
-      for (let i = 1; i <= n; i++) {
-        table += `<tr>
-          <td>${i}</td>
-          <td>${formatCurrency(A)}</td>
-        </tr>`;
-      }
-
-      table += `</table>`;
+      const totalPayment = monthlyPayment * months;
+      const totalInterest = interestPerMonth * months;
 
       document.getElementById('result').innerHTML = `
-        <b>Số tiền trả hàng tháng:</b> ${formatCurrency(A)} VNĐ<br>
-        <b>Tổng số tiền trả:</b> ${formatCurrency(totalPay)} VNĐ<br>
-        <b>Tổng lãi phải trả:</b> ${formatCurrency(totalInterest)} VNĐ
-        ${table}
+        <b>Tiền vay gốc:</b> ${formatNumber(P.toFixed(0))} VNĐ<br>
+        <b>Phí bảo hiểm:</b> ${formatNumber(insuranceFee.toFixed(0))} VNĐ<br>
+        <b>Tổng tiền tính lãi:</b> ${formatNumber(totalLoan.toFixed(0))} VNĐ<br>
+        <b>Tiền gốc trả mỗi tháng:</b> ${formatNumber(principalPerMonth.toFixed(0))} VNĐ<br>
+        <b>Lãi trả mỗi tháng:</b> ${formatNumber(interestPerMonth.toFixed(0))} VNĐ<br>
+        <b>🌟 Tổng số tiền đóng mỗi tháng:</b> <strong>${formatNumber(monthlyPayment.toFixed(0))} VNĐ</strong><br><br>
+        <b>Tổng lãi phải trả:</b> ${formatNumber(totalInterest.toFixed(0))} VNĐ<br>
+        <b>Tổng số tiền phải trả:</b> ${formatNumber(totalPayment.toFixed(0))} VNĐ
       `;
     }
   </script>
