@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Máy Tính Lãi Suất Vay - Lãi Suất Phẳng + BH</title>
+  <title>Máy Tính Lãi Suất Vay - Lãi Suất Phẳng Chuẩn</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -52,18 +52,18 @@
 </head>
 <body>
   <div class="container">
-    <h2>Tính Lãi Suất Vay (Của Thiên 0964307247)</h2>
+    <h2>Máy Tính Lãi Suất Vay (Của Thiên 0964307247)</h2>
     <label>Số tiền vay (VNĐ):</label>
-    <input type="text" id="amount" placeholder="Ví dụ: 28.500.000">
+    <input type="text" id="amount" placeholder="Ví dụ: 20.000.000">
 
     <label>Phí bảo hiểm (%):</label>
     <input type="number" id="insurance" placeholder="Ví dụ: 7.7">
 
     <label>Lãi suất (%/tháng):</label>
-    <input type="number" id="interest" placeholder="Ví dụ: 0.52">
+    <input type="number" id="interest" placeholder="Ví dụ: 2">
 
     <label>Thời hạn vay (tháng):</label>
-    <input type="number" id="months" placeholder="Ví dụ: 36">
+    <input type="number" id="months" placeholder="Ví dụ: 18">
 
     <button onclick="calculate()">Tính Toán</button>
 
@@ -114,15 +114,4 @@
 
       document.getElementById('result').innerHTML = `
         <b>Tiền vay gốc:</b> ${formatNumber(P.toFixed(0))} VNĐ<br>
-        <b>Phí bảo hiểm:</b> ${formatNumber(insuranceFee.toFixed(0))} VNĐ<br>
-        <b>Tổng tiền tính lãi:</b> ${formatNumber(totalLoan.toFixed(0))} VNĐ<br>
-        <b>Tiền gốc trả mỗi tháng:</b> ${formatNumber(principalPerMonth.toFixed(0))} VNĐ<br>
-        <b>Lãi trả mỗi tháng:</b> ${formatNumber(interestPerMonth.toFixed(0))} VNĐ<br>
-        <b>🌟 Tổng số tiền đóng mỗi tháng:</b> <strong>${formatNumber(monthlyPayment.toFixed(0))} VNĐ</strong><br><br>
-        <b>Tổng lãi phải trả:</b> ${formatNumber(totalInterest.toFixed(0))} VNĐ<br>
-        <b>Tổng số tiền phải trả:</b> ${formatNumber(totalPayment.toFixed(0))} VNĐ
-      `;
-    }
-  </script>
-</body>
-</html>
+        <b>Phí bảo hiểm:</b> ${formatNumber(ins
