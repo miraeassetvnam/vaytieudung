@@ -8,7 +8,7 @@
     h1 { text-align: center; }
     label { display: block; margin-top: 10px; }
     input { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 20px; }
+    button { margin-top: 15px; padding: 10px 20px; margin-right: 10px; }
     table { border-collapse: collapse; width: 100%; margin-top: 20px; }
     table, th, td { border: 1px solid #333; }
     th, td { padding: 8px; text-align: center; }
@@ -30,7 +30,7 @@
   </label>
 
   <label>% Bảo Hiểm (nếu có):
-    <input type="text" id="insurancePercent" value="0" />
+    <input type="text" id="insurancePercent" value="7,7" />
   </label>
 
   <label>Lãi Suất (%/năm):
@@ -42,8 +42,13 @@
   </label>
 
   <button onclick="calculateLoan()">Tính Lịch Thanh Toán</button>
+  <button onclick="printPDF()">In PDF</button>
+  <button onclick="exportExcel()">Xuất Excel</button>
 
   <div id="result"></div>
+
+  <!-- Thêm thư viện SheetJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
     function formatNumber(input) {
@@ -68,13 +73,13 @@
       const monthlyRate = interestRate / 12 / 100;
 
       const EMI = totalLoan * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
-      const collectionFee = 12000; // Phí thu hộ cố định mỗi kỳ
+      const collectionFee = 12000;
 
       let table = `<h2>Kết Quả</h2>
                   <p>Tổng vay + BH: ${totalLoan.toLocaleString()} VND</p>
                   <p>Phí thu hộ mỗi kỳ: ${collectionFee.toLocaleString()} VND (cố định)</p>
                   <p>Tổng thanh toán hàng tháng (gồm phí thu hộ): ${(EMI + collectionFee).toLocaleString(undefined, {maximumFractionDigits: 0})} VND</p>
-                  <table>
+                  <table id="repaymentTable">
                   <tr><th>Kỳ</th><th>Ngày Thanh Toán</th><th>Tiền Gốc</th><th>Tiền Lãi</th><th>Tổng</th><th>Dư Nợ Còn Lại</th></tr>`;
 
       let remaining = totalLoan;
@@ -100,6 +105,21 @@
 
       table += `</table>`;
       document.getElementById('result').innerHTML = table;
+    }
+
+    function printPDF() {
+      window.print();
+    }
+
+    function exportExcel() {
+      let table = document.getElementById('repaymentTable');
+      if (!table) {
+        alert("Vui lòng tính lịch thanh toán trước khi xuất Excel.");
+        return;
+      }
+
+      let wb = XLSX.utils.table_to_book(table, { sheet: "LichThanhToan" });
+      XLSX.writeFile(wb, "Lich_Thanh_Toan.xlsx");
     }
   </script>
 </body>
