@@ -15,30 +15,30 @@
   </style>
 </head>
 <body>
-  <h1>Tính Lãi Suất Vay (Liên hệ: 0964 307 247)</h1>
+  <h1>Tính Lãi Suất Vay (Liên hệ: 0964 307 247 Mr Thiên)</h1>
 
   <label>Ngày Giải Ngân:
     <input type="date" id="disbursalDate" />
   </label>
-  
+
   <label>Ngày Kỳ Đóng Đầu Tiên:
     <input type="date" id="firstEmiDate" />
   </label>
-  
+
   <label>Số Tiền Vay (VND):
     <input type="text" id="loanAmount" value="0" oninput="formatNumber(this)" />
   </label>
-  
+
   <label>% Bảo Hiểm (nếu có):
-    <input type="number" id="insurancePercent" value="7.7" />
+    <input type="text" id="insurancePercent" value="7.7" oninput="formatNumber(this)" />
   </label>
-  
+
   <label>Lãi Suất (%/năm):
-    <input type="number" id="interestRate" value="52" />
+    <input type="text" id="interestRate" value="52" oninput="formatNumber(this)" />
   </label>
 
   <label>Số Kỳ Vay (tháng):
-    <input type="number" id="months" value="24" />
+    <input type="text" id="months" value="24" oninput="formatNumber(this)" />
   </label>
 
   <button onclick="calculateLoan()">Tính Lịch Thanh Toán</button>
@@ -59,19 +59,21 @@
       const disbursalDate = new Date(document.getElementById('disbursalDate').value);
       const firstEmiDate = new Date(document.getElementById('firstEmiDate').value);
       const loanAmount = parseNumber(document.getElementById('loanAmount').value);
-      const insurancePercent = parseFloat(document.getElementById('insurancePercent').value);
-      const interestRate = parseFloat(document.getElementById('interestRate').value);
-      const months = parseInt(document.getElementById('months').value);
+      const insurancePercent = parseNumber(document.getElementById('insurancePercent').value);
+      const interestRate = parseNumber(document.getElementById('interestRate').value);
+      const months = parseNumber(document.getElementById('months').value);
 
       const insurance = loanAmount * insurancePercent / 100;
       const totalLoan = loanAmount + insurance;
       const monthlyRate = interestRate / 12 / 100;
 
       const EMI = totalLoan * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+      const collectionFee = 12000; // Phí thu hộ cố định mỗi kỳ
 
       let table = `<h2>Kết Quả</h2>
                   <p>Tổng vay + BH: ${totalLoan.toLocaleString()} VND</p>
-                  <p>Tổng thanh toán hàng tháng: ${EMI.toLocaleString(undefined, {maximumFractionDigits: 0})} VND</p>
+                  <p>Phí thu hộ mỗi kỳ: ${collectionFee.toLocaleString()} VND (cố định)</p>
+                  <p>Tổng thanh toán hàng tháng (gồm phí thu hộ): ${(EMI + collectionFee).toLocaleString(undefined, {maximumFractionDigits: 0})} VND</p>
                   <table>
                   <tr><th>Kỳ</th><th>Ngày Thanh Toán</th><th>Tiền Gốc</th><th>Tiền Lãi</th><th>Tổng</th><th>Dư Nợ Còn Lại</th></tr>`;
 
@@ -89,7 +91,7 @@
           <td>${payDate.toLocaleDateString()}</td>
           <td>${principal.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
           <td>${interest.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-          <td>${EMI.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+          <td>${(EMI + collectionFee).toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
           <td>${(remaining - principal).toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
         </tr>`;
 
