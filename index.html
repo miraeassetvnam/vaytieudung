@@ -2,116 +2,81 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Máy Tính Lãi Suất Vay - Lãi Suất Phẳng Chuẩn</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      padding: 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
-    button {
-      margin-top: 15px;
-      width: 100%;
-      padding: 12px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .result {
-      margin-top: 20px;
-      background: #e9ecef;
-      padding: 15px;
-      border-radius: 5px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lịch Thanh Toán - MAFC</title>
+  <!-- Sử dụng Tailwind CDN để style đẹp -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="container">
-    <h2>Máy Tính Lãi Suất Vay (Của Thiên 0964307247)</h2>
-    <label>Số tiền vay (VNĐ):</label>
-    <input type="text" id="amount" placeholder="Ví dụ: 20.000.000">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-4 text-center text-green-600">Tra cứu Lịch Thanh Toán</h1>
+    <form id="paymentForm" class="space-y-4">
+      <div>
+        <label for="contractId" class="block font-medium">Số hợp đồng</label>
+        <input type="text" id="contractId" class="w-full border rounded p-2" required placeholder="Nhập số hợp đồng">
+      </div>
+      <div>
+        <label for="idCard" class="block font-medium">Số CMND/CCCD</label>
+        <input type="text" id="idCard" class="w-full border rounded p-2" required placeholder="Nhập số CMND/CCCD">
+      </div>
+      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Tra cứu</button>
+    </form>
 
-    <label>Phí bảo hiểm (%):</label>
-    <input type="number" id="insurance" placeholder="Ví dụ: 7.7">
-
-    <label>Lãi suất (%/tháng):</label>
-    <input type="number" id="interest" placeholder="Ví dụ: 2">
-
-    <label>Thời hạn vay (tháng):</label>
-    <input type="number" id="months" placeholder="Ví dụ: 18">
-
-    <button onclick="calculate()">Tính Toán</button>
-
-    <div class="result" id="result"></div>
+    <div id="result" class="mt-6 hidden">
+      <h2 class="text-xl font-semibold mb-2">Lịch thanh toán</h2>
+      <table class="w-full border border-collapse">
+        <thead>
+          <tr class="bg-green-600 text-white">
+            <th class="border px-2 py-1">Kỳ</th>
+            <th class="border px-2 py-1">Ngày đến hạn</th>
+            <th class="border px-2 py-1">Số tiền</th>
+            <th class="border px-2 py-1">Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody">
+          <!-- Dữ liệu sẽ thêm ở đây bằng JS -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
-    // Format số có dấu chấm
-    function formatNumber(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+    const form = document.getElementById('paymentForm');
+    const result = document.getElementById('result');
+    const scheduleBody = document.getElementById('scheduleBody');
 
-    // Gỡ dấu chấm
-    function unformatNumber(num) {
-      return num.replace(/\./g, "");
-    }
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-    // Format khi gõ số tiền vay
-    document.getElementById('amount').addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\./g, '').replace(/\D/g, '');
-      if (value) {
-        e.target.value = formatNumber(value);
-      } else {
-        e.target.value = '';
-      }
+      // Lấy dữ liệu từ form
+      const contractId = document.getElementById('contractId').value;
+      const idCard = document.getElementById('idCard').value;
+
+      // Ở đây bạn sẽ thay bằng API thật
+      // Tạm thời giả lập dữ liệu
+      const dummyData = [
+        { ky: 1, ngay: '15/07/2025', tien: '1,500,000 VND', trangthai: 'Chưa thanh toán' },
+        { ky: 2, ngay: '15/08/2025', tien: '1,500,000 VND', trangthai: 'Chưa thanh toán' },
+        { ky: 3, ngay: '15/09/2025', tien: '1,500,000 VND', trangthai: 'Chưa thanh toán' },
+      ];
+
+      // Xóa dữ liệu cũ
+      scheduleBody.innerHTML = '';
+
+      // Thêm hàng mới
+      dummyData.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="border px-2 py-1 text-center">${item.ky}</td>
+          <td class="border px-2 py-1 text-center">${item.ngay}</td>
+          <td class="border px-2 py-1 text-center">${item.tien}</td>
+          <td class="border px-2 py-1 text-center">${item.trangthai}</td>
+        `;
+        scheduleBody.appendChild(row);
+      });
+
+      result.classList.remove('hidden');
     });
-
-    function calculate() {
-      const P = parseFloat(unformatNumber(document.getElementById('amount').value));
-      const insurance = parseFloat(document.getElementById('insurance').value);
-      const monthlyRate = parseFloat(document.getElementById('interest').value) / 100;
-      const months = parseInt(document.getElementById('months').value);
-
-      if (isNaN(P) || isNaN(insurance) || isNaN(monthlyRate) || isNaN(months) || P <= 0 || months <= 0) {
-        alert("Vui lòng nhập đầy đủ thông tin hợp lệ.");
-        return;
-      }
-
-      const insuranceFee = P * insurance / 100;
-      const totalLoan = P + insuranceFee;
-
-      const principalPerMonth = totalLoan / months;
-      const interestPerMonth = totalLoan * monthlyRate;
-      const monthlyPayment = principalPerMonth + interestPerMonth;
-
-      const totalPayment = monthlyPayment * months;
-      const totalInterest = interestPerMonth * months;
-
-      document.getElementById('result').innerHTML = `
-        <b>Tiền vay gốc:</b> ${formatNumber(P.toFixed(0))} VNĐ<br>
-        <b>Phí bảo hiểm:</b> ${formatNumber(ins
+  </script>
+</body>
+</html>
