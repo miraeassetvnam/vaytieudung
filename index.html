@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tính Lãi Suất Vay</title>
+  <title>Tính Lãi Suất Vay (Dư Nợ Giảm Dần - Tổng Đóng Cố Định)</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
     h1 { text-align: center; }
@@ -15,7 +15,7 @@
   </style>
 </head>
 <body>
-  <h1>Tính Lãi Suất Vay (Lãi Phẳng)</h1>
+  <h1>Tính Lãi Suất Vay (Dư Nợ Giảm Dần - Tổng Cố Định)</h1>
 
   <label>Ngày Giải Ngân:
     <input type="date" id="disbursalDate" />
@@ -56,32 +56,36 @@
 
       const insurance = loanAmount * insurancePercent / 100;
       const totalLoan = loanAmount + insurance;
-      const monthlyInterestRate = interestRate / 12 / 100;
+      const monthlyRate = interestRate / 12 / 100;
 
-      // Lãi phẳng: tính lãi cố định trên số gốc ban đầu
-      const monthlyInterest = totalLoan * monthlyInterestRate;
-      const principalPerMonth = totalLoan / months;
-      const monthlyPayment = principalPerMonth + monthlyInterest;
+      // Tính EMI (số tiền phải trả cố định hàng tháng)
+      const EMI = totalLoan * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
 
       let table = `<h2>Kết Quả</h2>
                   <p>Tổng vay + BH: ${totalLoan.toLocaleString()} VND</p>
+                  <p>Tổng thanh toán hàng tháng: ${EMI.toLocaleString(undefined, {maximumFractionDigits: 0})} VND</p>
                   <table>
                   <tr><th>Kỳ</th><th>Ngày Thanh Toán</th><th>Tiền Gốc</th><th>Tiền Lãi</th><th>Tổng</th><th>Dư Nợ Còn Lại</th></tr>`;
 
       let remaining = totalLoan;
 
       for (let i = 1; i <= months; i++) {
+        let interest = remaining * monthlyRate;
+        let principal = EMI - interest;
+
         let payDate = new Date(firstEmiDate);
         payDate.setMonth(payDate.getMonth() + i - 1);
 
         table += `<tr>
           <td>${i}</td>
           <td>${payDate.toLocaleDateString()}</td>
-          <td>${principalPerMonth.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-          <td>${monthlyInterest.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-          <td>${monthlyPayment.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-          <td>${(remaining - principalPerMonth * i).toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+          <td>${principal.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+          <td>${interest.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+          <td>${EMI.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+          <td>${(remaining - principal).toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
         </tr>`;
+
+        remaining -= principal;
       }
 
       table += `</table>`;
