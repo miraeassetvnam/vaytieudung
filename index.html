@@ -30,15 +30,15 @@
   </label>
 
   <label>% Bảo Hiểm (nếu có):
-    <input type="text" id="insurancePercent" value="0" oninput="formatNumber(this)" />
+    <input type="text" id="insurancePercent" value="0" />
   </label>
 
   <label>Lãi Suất (%/năm):
-    <input type="text" id="interestRate" value="52" oninput="formatNumber(this)" />
+    <input type="text" id="interestRate" value="52" />
   </label>
 
   <label>Số Kỳ Vay (tháng):
-    <input type="text" id="months" value="24" oninput="formatNumber(this)" />
+    <input type="text" id="months" value="24" />
   </label>
 
   <button onclick="calculateLoan()">Tính Lịch Thanh Toán</button>
@@ -59,9 +59,9 @@
       const disbursalDate = new Date(document.getElementById('disbursalDate').value);
       const firstEmiDate = new Date(document.getElementById('firstEmiDate').value);
       const loanAmount = parseNumber(document.getElementById('loanAmount').value);
-      const insurancePercent = parseNumber(document.getElementById('insurancePercent').value);
-      const interestRate = parseNumber(document.getElementById('interestRate').value);
-      const months = parseNumber(document.getElementById('months').value);
+      const insurancePercent = Number(document.getElementById('insurancePercent').value);
+      const interestRate = Number(document.getElementById('interestRate').value);
+      const months = Number(document.getElementById('months').value);
 
       const insurance = loanAmount * insurancePercent / 100;
       const totalLoan = loanAmount + insurance;
