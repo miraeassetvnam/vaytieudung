@@ -2,16 +2,49 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tính Lãi Suất Vay (Của Thiên)</title>
+  <title>Tính Lãi Suất Vay (Thiên Mirae Asset)</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
-    h1 { text-align: center; }
-    label { display: block; margin-top: 10px; }
-    input { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 20px; margin-right: 10px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    table, th, td { border: 1px solid #333; }
-    th, td { padding: 8px; text-align: center; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      margin-right: 10px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #333;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #555;
+    }
   </style>
 </head>
 <body>
@@ -30,7 +63,7 @@
   </label>
 
   <label>% Bảo Hiểm (nếu có):
-    <input type="text" id="insurancePercent" value="7.7" />
+    <input type="text" id="insurancePercent" value="7,7" />
   </label>
 
   <label>Lãi Suất (%/năm):
@@ -46,6 +79,10 @@
   <button onclick="exportExcel()">Xuất Excel</button>
 
   <div id="result"></div>
+
+  <footer>
+    © Copyright 2025 Võ Quốc Thiên
+  </footer>
 
   <!-- Thêm thư viện SheetJS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -64,7 +101,9 @@
       const disbursalDate = new Date(document.getElementById('disbursalDate').value);
       const firstEmiDate = new Date(document.getElementById('firstEmiDate').value);
       const loanAmount = parseNumber(document.getElementById('loanAmount').value);
-      const insurancePercent = Number(document.getElementById('insurancePercent').value);
+
+      // Sửa: thay , thành .
+      const insurancePercent = Number(document.getElementById('insurancePercent').value.replace(",", "."));
       const interestRate = Number(document.getElementById('interestRate').value);
       const months = Number(document.getElementById('months').value);
 
@@ -76,11 +115,18 @@
       const collectionFee = 12000;
 
       let table = `<h2>Kết Quả</h2>
-                  <p>Tổng vay + BH: ${totalLoan.toLocaleString()} VND</p>
-                  <p>Phí thu hộ mỗi kỳ: ${collectionFee.toLocaleString()} VND (cố định)</p>
-                  <p>Tổng thanh toán hàng tháng (gồm phí thu hộ): ${(EMI + collectionFee).toLocaleString(undefined, {maximumFractionDigits: 0})} VND</p>
-                  <table id="repaymentTable">
-                  <tr><th>Kỳ</th><th>Ngày Thanh Toán</th><th>Tiền Gốc</th><th>Tiền Lãi</th><th>Tổng</th><th>Dư Nợ Còn Lại</th></tr>`;
+        <p>Tổng vay + BH: ${totalLoan.toLocaleString()} VND</p>
+        <p>Phí thu hộ mỗi kỳ: ${collectionFee.toLocaleString()} VND (cố định)</p>
+        <p>Tổng thanh toán hàng tháng (gồm phí thu hộ): ${(EMI + collectionFee).toLocaleString(undefined, {maximumFractionDigits: 0})} VND</p>
+        <table id="repaymentTable">
+          <tr>
+            <th>Kỳ</th>
+            <th>Ngày Thanh Toán</th>
+            <th>Tiền Gốc</th>
+            <th>Tiền Lãi</th>
+            <th>Tổng</th>
+            <th>Dư Nợ Còn Lại</th>
+          </tr>`;
 
       let remaining = totalLoan;
 
